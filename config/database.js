@@ -10,10 +10,10 @@ const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'review_bot',
   synchronize: process.env.NODE_ENV === 'development', // Auto-sync in dev only
-  logging: process.env.NODE_ENV === 'development',
+  logging: false,
   entities: ['src/entities/**/*.js'],
   migrations: ['src/migrations/**/*.js'],
-  subscribers: [UserSubscriber],
+  subscribers: [new UserSubscriber()],
 });
 
 module.exports = { AppDataSource };

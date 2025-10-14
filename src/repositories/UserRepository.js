@@ -1,5 +1,5 @@
 const { AppDataSource } = require('../../config/database');
-const { comparePassword } = require('../utils/password');
+const { comparePassword, hashPassword } = require('../utils/password');
 
 /**
  * User Repository
@@ -22,11 +22,15 @@ class UserRepository {
   }
 
   /**
-   * Create a new user (password will be automatically hashed by UserSubscriber)
+   * Create a new user (password will be automatically hashed)
    * @param {Object} userData - User data
    * @returns {Promise<Object>} Created user
    */
   async createUser(userData) {
+    // Hash password if provided
+    if (userData.password) {
+      userData.password = await hashPassword(userData.password);
+    }
     const user = this.repository.create(userData);
     return await this.repository.save(user);
   }
@@ -102,6 +106,10 @@ class UserRepository {
    * @returns {Promise<Object>} Updated user
    */
   async updateUser(id, updateData) {
+    // Hash password if being updated
+    if (updateData.password) {
+      updateData.password = await hashPassword(updateData.password);
+    }
     await this.repository.update(id, updateData);
     return await this.findById(id);
   }

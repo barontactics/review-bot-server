@@ -3,6 +3,7 @@
  * Checks if user is logged in by verifying session
  */
 const requireAuth = (req, res, next) => {
+  console.log(req.session, req.session.userId)
   // Check if user ID exists in session
   if (!req.session || !req.session.userId) {
     return res.status(401).json({
