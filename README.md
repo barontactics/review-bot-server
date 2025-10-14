@@ -68,6 +68,7 @@ Both repositories have **100% statement, branch, function, and line coverage**. 
 │   │   └── Video.js         # Video entity
 │   ├── middleware/          # Express middleware
 │   │   ├── auth.js          # Authentication middleware
+│   │   ├── logger.js        # Request logging middleware
 │   │   └── upload.js        # Multer file upload middleware
 │   ├── repositories/        # Database repositories
 │   │   ├── __tests__/       # Repository unit tests
@@ -254,6 +255,37 @@ const videoWithUser = await videoRepository.findOne({
 - `GCP_PROJECT_ID` - GCP project ID
 - `GCP_KEY_FILE` - Path to service account JSON key file (optional if using ADC)
 - `GCS_BUCKET_NAME` - GCS bucket name (default: review-bot-videos)
+
+## Request Logging
+
+The application includes a custom logging middleware that logs all incoming HTTP requests to the console.
+
+### Logged Information:
+- **Timestamp** - ISO 8601 format
+- **HTTP Method** - GET, POST, PUT, DELETE, etc. (color-coded)
+- **Status Code** - Response status (color-coded)
+- **Response Time** - Duration in milliseconds
+- **URL** - Request path
+- **IP Address** - Client IP address
+
+### Example Output:
+```
+2024-01-15T10:30:00.000Z | GET     | 200 | 15ms | /api/user/550e8400-e29b-41d4-a716-446655440000 | ::1
+2024-01-15T10:30:05.000Z | POST    | 201 | 245ms | /api/videos/upload | ::1
+2024-01-15T10:30:10.000Z | DELETE  | 200 | 89ms | /api/videos/650e8400-e29b-41d4-a716-446655440001 | ::1
+```
+
+### Color Coding:
+- **Status Codes:**
+  - 2xx (Success) - Green
+  - 3xx (Redirect) - Cyan
+  - 4xx (Client Error) - Yellow
+  - 5xx (Server Error) - Red
+- **HTTP Methods:**
+  - GET - Blue
+  - POST - Green
+  - PUT/PATCH - Yellow
+  - DELETE - Red
 
 ## Authentication
 

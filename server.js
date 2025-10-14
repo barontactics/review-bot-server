@@ -7,6 +7,7 @@ const passport = require('./config/passport');
 const { AppDataSource } = require('./config/database');
 const UserRepository = require('./src/repositories/UserRepository');
 const VideoRepository = require('./src/repositories/VideoRepository');
+const logger = require('./src/middleware/logger');
 const userRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const videoRoutes = require('./src/routes/videos');
@@ -39,6 +40,9 @@ app.use(
 // Passport initialization (must be after session)
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Request logging
+app.use(logger);
 
 // Routes
 app.get('/', (req, res) => {
